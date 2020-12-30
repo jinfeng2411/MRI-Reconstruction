@@ -1,0 +1,20 @@
+####################### U-net ############################
+1、train
+python models/Unet/train.py --data-path /home/jinfeng/Desktop/Brain_workplace/Brain_datasets  --exp-dir checkpoints/unet  --use-visdom True
+
+2、test
+python models/Unet/run.py  --data-path '/home/jinfeng/Desktop/Brain_workplace/Brain_datasets' --checkpoint 'checkpoints/unet/best_model.pt'  --out-dir reconstructions_val/unet
+
+3、evaluate
+python utils/evaluate_from_i.py --target-path /home/jinfeng/Desktop/Brain_workplace/Brain_datasets/Val --predictions-path reconstructions_val/unet --name unet  --i 0
+
+4、resume
+python models/Unet/train.py --data-path /home/jinfeng/Desktop/Brain_workplace/Brain_datasets  --use-visdom True  --resume  --checkpoint checkpoints/unet/model.pt
+
+
+##################### Zero_filled #######################
+
+python models/zero_filled/run_zero_filled.py --data-path /home/jinfeng/Desktop/Brain_workplace/Brain_datasets/Val --out-path reconstructions_val/zero_filled
+
+
+
