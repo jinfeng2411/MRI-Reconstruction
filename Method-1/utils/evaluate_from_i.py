@@ -94,6 +94,7 @@ def evaluate(args):
         tgt_kspace_tensor = torch.from_numpy(tgt_kspace)
         tgt_img = np.zeros(tgt_kspace_tensor.shape[:3])
         #print(tgt_img.shape)  # (num_slices,256,256)
+        rec_img = np.load(args.predictions_path / tgt_file.name)   # image space, (num_slices,256,256)
         for i in range(len(tgt_kspace_tensor)):
             tgt_img_tensor_i = torch.ifft(tgt_kspace_tensor[i,:,:,:], 2, normalized=True).type(torch.FloatTensor)
             tgt_img_i = tgt_img_tensor_i.numpy()
@@ -101,10 +102,9 @@ def evaluate(args):
             # 每张图片范围压到 (0，255)
             tgt_img_i = (tgt_img_i-np.min(tgt_img_i))/(np.max(tgt_img_i)-np.min(tgt_img_i))*255
             tgt_img[i,:,:] = tgt_img_i
-
-        rec_img = np.load(args.predictions_path / tgt_file.name)   # image space, (num_slices,256,256)
-        # 每张图片范围压到 (0，255)
-        rec_img = (rec_img-np.min(rec_img, axis=0))/(np.max(rec_img, axis=0)-np.min(rec_img, axis=0))*255
+            
+            # 每张图片范围压到 (0，255)
+            rec_img[i,:,:] = (rec_img[i,:,:]-np.min(rec_img[i,:,:]))/(np.max(rec_img[i,:,:])-np.min(rec_img[i,:,:]))*255
         #print(rec_img.shape)  #(num_slices,256,256)
 
         '''
